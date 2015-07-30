@@ -13,7 +13,7 @@
  foreach($fields as $item){
 	 $data = input("$item");
 	 if(empty($data)){
-		 ossn_trigger_message(ossn_print('smpt:fields:required'), 'error');
+		 ossn_trigger_message(ossn_print('smtp:fields:required'), 'error');
 		 redirect(REF);
 	 } else {
 		 $vars[$item] = $data;
@@ -22,8 +22,8 @@
  
  $com = new OssnComponents;
  if($com->setSettings('SMTP', $vars)){
-    ossn_trigger_message(ossn_print('smpt:settings:saved'));
+    ossn_trigger_message(ossn_print('smtp:settings:saved'));
  } else {
-    ossn_trigger_message(ossn_print('smpt:settings:error'), 'error');
+    ossn_trigger_message(ossn_print('smtp:settings:error'), 'error');
  }
     redirect(REF);	 	  
