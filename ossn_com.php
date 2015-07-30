@@ -50,7 +50,7 @@ function ossn_smtp($hook, $type, $mail, $return) {
  * 
  * @return array
  */
-function ossn_smpt_connected() {
+function ossn_smtp_connected() {
 		$return           = array();
 		$mail             = new OssnMail;
 		$smtp             = new OssnComponents;
