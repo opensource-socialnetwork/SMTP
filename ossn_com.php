@@ -37,7 +37,7 @@ function ossn_smtp($hook, $type, $mail, $return) {
 		$settings = $smtp->getSettings('SMTP');
 		if(!empty($settings->host) && !empty($settings->port) && !empty($settings->username) && !empty($settings->password)) {
 				$mail->IsSMTP();
-				$mail->SMPTAuth = true;
+				$mail->SMTPAuth = true;
 				$mail->Host     = $settings->host;
 				$mail->Port     = $settings->port;
 				$mail->Username = $settings->username;
