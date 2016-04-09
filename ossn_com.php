@@ -58,7 +58,7 @@ function ossn_smtp_connected() {
 		$return['status'] = ossn_print("smtp:connectio:failed");
 		if(!empty($settings->host) && !empty($settings->port) && !empty($settings->username) && !empty($settings->password)) {
 				$mail->IsSMTP();
-				$mail->SMPTAuth = true;
+				$mail->SMTPAuth = true;
 				$mail->Host     = $settings->host;
 				$mail->Port     = $settings->port;
 				$mail->Username = $settings->username;
