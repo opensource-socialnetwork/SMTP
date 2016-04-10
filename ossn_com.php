@@ -43,7 +43,6 @@ function ossn_smtp_deny(){
  * @return void|boolean
  */
 function ossn_smtp($hook, $type, $mail, $return) {
-		echo ossn_dump($mail);
 		$smtp     = new OssnComponents;
 		$settings = $smtp->getSettings('SMTP');
 		if(!empty($settings->host) && !empty($settings->port) && !empty($settings->username) && !empty($settings->password)) {
