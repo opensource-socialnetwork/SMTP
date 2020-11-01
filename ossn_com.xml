@@ -7,9 +7,9 @@
     <license>GNU General Public License, version 2</license>
     <author_url>http://www.informatikon.com/</author_url>
     <license_url>http://www.opensource-socialnetwork.org/licence/</license_url>
-    <version>1.2</version>
+    <version>5.0</version>
 	<requires>
 		<type>ossn_version</type>
-		<version>4.2</version>
+		<version>5.6</version>
 	</requires>
 </component>

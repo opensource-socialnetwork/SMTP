@@ -16,22 +16,12 @@ define('__SMTP__', ossn_route()->com . 'SMTP/');
  * @access private
  */
 function ossn_com_smtp_init() {
-		ossn_add_hook('email', 'send:policy', 'ossn_smtp_deny', 1);
-		ossn_add_hook('email', 'send', 'ossn_smtp', 1);
-		
+		ossn_add_hook('email', 'config', 'ossn_smtp', 1);	
 		ossn_register_com_panel('SMTP', 'settings');
 		
 		if(ossn_isAdminLoggedin()) {
 				ossn_register_action('admin/smtp/settings/save', __SMTP__ . 'actions/admin/settings/save.php');
 		}
-}
-/**
- * Stop the default send mail
- *
- * @return boolean
- */
-function ossn_smtp_deny(){
-		return false;
 }
 /**
  * Ossn SMTP
@@ -52,7 +42,8 @@ function ossn_smtp($hook, $type, $mail, $return) {
 				$mail->Port     = $settings->port;
 				$mail->Username = $settings->username;
 				$mail->Password = $settings->password;
-				return $mail->send();
+				//from ossn v5.6 allow to send email from default class
+				return $mail;
 		}
 }
 /**

@@ -17,5 +17,6 @@ $en = array(
 	'smtp:port' => 'Port',
 	'smtp:username' => 'Username (name@yourdomain.com)',
 	'smtp:password' => 'Password',
+	'smtp:oauth:warning' => 'Please note that this component will not work with gmail, yahoo, outlook SMTP because those are personal emails and require OAUTH authentication. Please use standard SMTP from your domain hosting provider. You may use AWS SMTP.'
 );
 ossn_register_languages('en', $en); 

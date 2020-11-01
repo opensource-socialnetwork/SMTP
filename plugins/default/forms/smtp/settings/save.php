@@ -11,6 +11,7 @@
  $smtp = new OssnComponents;
  $settings = $smtp->getSettings('SMTP');
  ?>
+ <div class="alert alert-warning"><?php echo ossn_print('smtp:oauth:warning');?></div>
  <div>
  	<label><?php echo ossn_print('smtp:host');?></label>
  	<input type="text" name="host" value="<?php echo $settings->host;?>" />
