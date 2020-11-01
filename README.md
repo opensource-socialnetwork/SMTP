@@ -9,4 +9,4 @@ Installation
 
 Install it using component installer and after installation go to components and enable it. Configure component settings.
 
-Requires OSSN V4.2 or >
+Requires OSSN V5.6 or >
