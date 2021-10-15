@@ -135,20 +135,26 @@ function ossn_smtp_connected() {
 								'clientId'     => $settings->clientId,
 								'clientSecret' => $settings->clientSecret,
 						));
-						$oauth = new OAuth(array(
-								'provider'     => $provider,
-								'clientId'     => $settings->clientId,
-								'clientSecret' => $settings->clientSecret,
-								'refreshToken' => $settings->oauth_token_google,
-								'userName'     => $settings->username,
+						$grant = new League\OAuth2\Client\Grant\RefreshToken();
+						$token = $provider->getAccessToken($grant, array(
+								'refresh_token' => $settings->oauth_token_google,
 						));
-						$mail->setOAuth($oauth);
-				}
-				if($mail->smtpConnect()) {
-						$mail->smtpClose();
-						$return['status'] = ossn_print('smtp:connection:connected');
+						try {
+								$ownerDetails = $provider->getResourceOwner($token);
+								$name         = $ownerDetails->getFirstName();
+								if(!empty($name)) {
+										$return['status'] = ossn_print('smtp:connection:connected');
+								}
+						} catch (Exception $e) {
+								$return['status'] = ossn_print('smtp:connection:connected');
+						}
 				} else {
-						$return['status'] = ossn_print('smtp:connectio:failed');
+						if($mail->smtpConnect()) {
+								$mail->smtpClose();
+								$return['status'] = ossn_print('smtp:connection:connected');
+						} else {
+								$return['status'] = ossn_print('smtp:connectio:failed');
+						}
 				}
 		}
 		return $return;
