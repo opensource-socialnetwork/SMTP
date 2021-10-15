@@ -10,3 +10,6 @@ Installation
 Install it using component installer and after installation go to components and enable it. Configure component settings.
 
 Requires OSSN V5.6 or >
+
+Supports only Gmail OAUTH2 authentication.
+SMTPSecure Channel for Gmail is 'ssl'
