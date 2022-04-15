@@ -19,6 +19,4 @@ $vars = array(
 		'oauth_token_google' => '',
 );
 $com = new OssnComponents();
-if($com->setSettings('SMTP', $vars)) {
-		redirect('administrator/component/SMTP');
-}
+$com->setSettings('SMTP', $vars);
