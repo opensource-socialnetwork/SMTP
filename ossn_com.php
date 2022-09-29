@@ -69,6 +69,9 @@ function ossn_smtp($hook, $type, $mail, $return) {
 
 		$smtp     = new OssnComponents();
 		$settings = $smtp->getSettings('SMTP');
+		if(isset($settings->oauth_token_google) && !empty($settings->oauth_token_google)) {
+				$settings->password = 'dummy';	
+		}
 		if(!empty($settings->host) && !empty($settings->port) && !empty($settings->username) && !empty($settings->password)) {
 				$mail->IsSMTP();
 				$mail->SMTPAuth = true;
@@ -88,7 +91,7 @@ function ossn_smtp($hook, $type, $mail, $return) {
 								'clientId'     => $settings->clientId,
 								'clientSecret' => $settings->clientSecret,
 						));
-						$oauth = new OAuth(array(
+						$oauth = new OAuthTokenProvider(array(
 								'provider'     => $provider,
 								'clientId'     => $settings->clientId,
 								'clientSecret' => $settings->clientSecret,
@@ -115,6 +118,9 @@ function ossn_smtp_connected() {
 		$smtp             = new OssnComponents();
 		$settings         = $smtp->getSettings('SMTP');
 		$return['status'] = ossn_print('smtp:connectio:failed');
+		if(isset($settings->oauth_token_google) && !empty($settings->oauth_token_google)) {
+				$settings->password = 'dummy';	
+		}		
 		if(!empty($settings->host) && !empty($settings->port) && !empty($settings->username) && !empty($settings->password)) {
 				$mail->IsSMTP();
 				$mail->Timeout  = 5; //timeout after 10 seconds
