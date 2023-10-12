@@ -82,6 +82,12 @@ function ossn_smtp($hook, $type, $mail, $return) {
 				$mail->Username   = $settings->username;
 				$mail->Password   = $settings->password;
 				$mail->SMTPSecure = true;
+				if($settings->port == "465"){	
+					$mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+				}
+				if($settings->port == "587"){	
+					$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+				}
 				if(isset($settings->oauth_token_google) && !empty($settings->oauth_token_google)) {
 						unset($mail->SMTPSecure);
 						unset($mail->Password);
@@ -132,6 +138,12 @@ function ossn_smtp_connected() {
 				$mail->Username   = $settings->username;
 				$mail->Password   = $settings->password;
 				$mail->SMTPSecure = true;
+				if($settings->port == "465"){	
+					$mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+				}
+				if($settings->port == "587"){	
+					$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+				}				
 				if(isset($settings->oauth_token_google) && !empty($settings->oauth_token_google)) {
 						unset($mail->SMTPSecure);
 						unset($mail->Password);
