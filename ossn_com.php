@@ -71,10 +71,10 @@ function ossn_smtp($hook, $type, $mail, $return) {
 		$settings = $smtp->getSettings('SMTP');
 		
 		if(isset($settings->oauth_token_google) && !empty($settings->oauth_token_google) && $settings->oauth_type == "gmail") {
-				$settings->password = 'dummy';	
+				$settings->password = '';	
 		}
 		
-		if(!empty($settings->host) && !empty($settings->port) && !empty($settings->username) && !empty($settings->password)) {
+		if(!empty($settings->host) && !empty($settings->port) && !empty($settings->username)) {
 				$mail->IsSMTP();
 				$mail->SMTPAuth = true;
 				//$mail->SMTPDebug = false;
@@ -92,7 +92,6 @@ function ossn_smtp($hook, $type, $mail, $return) {
 				}
 				if(isset($settings->oauth_token_google) && !empty($settings->oauth_token_google) && $settings->oauth_type == "gmail") {
 						unset($mail->SMTPSecure);
-						unset($mail->Password);
 						$mail->SMTPSecure = 'ssl';
 						$mail->AuthType   = 'XOAUTH2';
 						$provider         = new League\OAuth2\Client\Provider\Google(array(
@@ -127,9 +126,9 @@ function ossn_smtp_connected() {
 		$settings         = $smtp->getSettings('SMTP');
 		$return['status'] = ossn_print('smtp:connectio:failed');
 		if(isset($settings->oauth_token_google) && !empty($settings->oauth_token_google) && $settings->oauth_type == "gmail") {
-				$settings->password = 'dummy';	
+				$settings->password = '';	
 		}		
-		if(!empty($settings->host) && !empty($settings->port) && !empty($settings->username) && !empty($settings->password)) {
+		if(!empty($settings->host) && !empty($settings->port) && !empty($settings->username)) {
 				$mail->IsSMTP();
 				$mail->Timeout  = 5; //timeout after 10 seconds
 				$mail->SMTPAuth = true;
@@ -148,7 +147,6 @@ function ossn_smtp_connected() {
 				}				
 				if(isset($settings->oauth_token_google) && !empty($settings->oauth_token_google) && $settings->oauth_type == "gmail") {
 						unset($mail->SMTPSecure);
-						unset($mail->Password);
 						$mail->SMTPSecure = 'ssl';
 						$mail->AuthType   = 'XOAUTH2';
 						$provider         = new League\OAuth2\Client\Provider\Google(array(
