@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace GuzzleHttp\Promise;
 
 /**
@@ -7,17 +9,16 @@ namespace GuzzleHttp\Promise;
  *
  * Thenning off of this promise will invoke the onFulfilled callback
  * immediately and ignore other callbacks.
+ *
+ * @final
  */
 class FulfilledPromise implements PromiseInterface
 {
     private $value;
 
-    /** @var Promise|null */
-    private $promise;
-
-    /** @var callable|null */
-    private $onFulfilled;
-
+    /**
+     * @param mixed $value
+     */
     public function __construct($value)
     {
         if (is_object($value) && method_exists($value, 'then')) {
@@ -30,73 +31,59 @@ class FulfilledPromise implements PromiseInterface
     }
 
     public function then(
-        callable $onFulfilled = null,
-        callable $onRejected = null
-    ) {
+        ?callable $onFulfilled = null,
+        ?callable $onRejected = null
+    ): PromiseInterface {
         // Return itself if there is no onFulfilled function.
         if (!$onFulfilled) {
             return $this;
         }
 
-        $this->onFulfilled = $onFulfilled;
-
         $queue = Utils::queue();
-        $p = $this->promise = new Promise([$queue, 'run']);
+        $p = new Promise([$queue, 'run']);
         $value = $this->value;
-        $queue->add(static function () use ($p, $value, $onFulfilled) {
+        $queue->add(static function () use ($p, $value, $onFulfilled): void {
             if (Is::pending($p)) {
-                self::callHandler($p, $value, $onFulfilled);
+                try {
+                    $p->resolve($onFulfilled($value));
+                } catch (\Throwable $e) {
+                    $p->reject($e);
+                }
             }
         });
 
         return $p;
     }
 
-    public function otherwise(callable $onRejected)
+    public function otherwise(callable $onRejected): PromiseInterface
     {
         return $this->then(null, $onRejected);
     }
 
-    public function wait($unwrap = true, $defaultDelivery = null)
+    public function wait(bool $unwrap = true)
     {
-        // Don't run the queue to avoid deadlocks, instead directly resolve the promise.
-        if ($this->promise && Is::pending($this->promise)) {
-            self::callHandler($this->promise, $this->value, $this->onFulfilled);
-        }
-
         return $unwrap ? $this->value : null;
     }
 
-    public function getState()
+    public function getState(): string
     {
         return self::FULFILLED;
     }
 
-    public function resolve($value)
+    public function resolve($value): void
     {
         if ($value !== $this->value) {
-            throw new \LogicException("Cannot resolve a fulfilled promise");
+            throw new \LogicException('Cannot resolve a fulfilled promise');
         }
     }
 
-    public function reject($reason)
+    public function reject($reason): void
     {
-        throw new \LogicException("Cannot reject a fulfilled promise");
+        throw new \LogicException('Cannot reject a fulfilled promise');
     }
 
-    public function cancel()
+    public function cancel(): void
     {
         // pass
-    }
-
-    private static function callHandler(Promise $promise, $value, callable $handler)
-    {
-        try {
-            $promise->resolve($handler($value));
-        } catch (\Throwable $e) {
-            $promise->reject($e);
-        } catch (\Exception $e) {
-            $promise->reject($e);
-        }
     }
 }
